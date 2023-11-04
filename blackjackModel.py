@@ -37,7 +37,11 @@ def simulate_player(player_hand, dealer_upcard, deck):
     stand_losses = 1000 - stand_wins - stand_pushes
     stand_ev = (stand_wins - stand_losses) / 1000.0
 
-    # Return the expected values
+    # If the player's hand is less than 17, return the expected value of hitting
+    if sum(player_hand) < 17:
+        return hit_ev
+
+    # Otherwise, return the expected values as a tuple
     return hit_ev, stand_ev
 
 if __name__ == "__main__":
@@ -45,6 +49,13 @@ if __name__ == "__main__":
     for dealer_upcard in range(1, 11):
         for player_initial_total in range(4, 21):  # Assuming player won't hit below 4
             player_hand = [player_initial_total - 1, 1]  # Simplified initial hand
-            hit_ev, stand_ev = simulate_player(player_hand, dealer_upcard, deck)
-            optimal_strategy = 'hit' if hit_ev > stand_ev else 'stand'
+            result = simulate_player(player_hand, dealer_upcard, deck)
+            # If the result is a tuple, unpack it
+            if isinstance(result, tuple):
+                hit_ev, stand_ev = result
+                optimal_strategy = 'hit' if hit_ev > stand_ev else 'stand'
+            else:
+                # If the result is not a tuple, it's the expected value of hitting
+                hit_ev = result
+                optimal_strategy = 'hit' if hit_ev > 0 else 'stand'
             print(f"Dealer shows: {dealer_upcard}, Player has: {player_initial_total}, Optimal strategy: {optimal_strategy}")
