@@ -1,6 +1,3 @@
-import random
-import itertools
-
 # class Deck:
 #     def draw_card(self):
 #         # Draw a random card from 1-13
@@ -61,7 +58,8 @@ import itertools
 #             optimal_strategy = make_decision(player_hand, dealer_upcard, deck)
 #             print(f"Dealer shows: {dealer_upcard}, Player has: {player_initial_total}, Optimal strategy: {optimal_strategy}")
 
-
+import random
+import itertools
 
 def main():
     card_values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
@@ -88,22 +86,30 @@ def main():
         hand = init_hand
         dealer_hand = random.choice(hand_values)
 
-        while hand < 17:
+        while hand < 10:
             # if hits > 2:
             #     break
             hand += random.choice(card_values)
             if hand > 21:
                 effectiveness -= 1
+        
+        if hand > 21:
+            continue
 
         while dealer_hand < 17:
             dealer_hand += random.choice(card_values)
+            if dealer_hand > 21:
+                effectiveness += 1
+
+        if dealer_hand > 21:
+            continue
 
         if hand < dealer_hand:
             effectiveness -= 1
         elif hand > dealer_hand:
             effectiveness += 1
 
-        return effectiveness
+    return effectiveness
         
 if __name__ == "__main__":
     num = 0
